@@ -1,0 +1,16 @@
+project:
+  generate:
+    excludes:
+    - makefile$
+    - LICENSE$
+  template-directory: make-proj
+  context:
+    sub-group: com.zensols.nlp
+    group: gate
+    package: zensols.annotate
+    project: clj-gate
+    user: plandes
+    app-name: annotate
+    project-name: Gate wraper
+    project-description: Wrapper for Gate Annotation Utility
+
