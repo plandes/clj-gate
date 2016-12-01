@@ -48,9 +48,12 @@
 
 (defn- feature-map
   "Create a Gate `FeatureMap` from a Clojure (or any) map."
-  [map]
-  (doto (Factory/newFeatureMap)
-    (.putAll map)))
+  ([]
+   (feature-map nil))
+  ([map]
+   (let [fm (Factory/newFeatureMap)]
+     (if map (.putAll fm map))
+     fm)))
 
 (defn annotation-schema-from-resource
   "Create a schema annotation from a schema the contents of **resource**.
@@ -95,11 +98,13 @@
   "Annotate a document with entity **label** `type` from character
   position [**start** **end**) using additional entity metadata **features** in
   document **doc**."
-  [start end label features doc]
-  (let [fmap (.getFeatures doc)
-        anons (.getAnnotations doc)]
-    (.add anons start end label (feature-map features))
-    doc))
+  ([start end label doc]
+   (annotate-document start end label {} doc))
+  ([start end label features doc]
+   (let [fmap (.getFeatures doc)
+         anons (.getAnnotations doc)]
+     (.add anons start end label (feature-map features))
+     doc)))
 
 (defn store-documents
   "Create a Gate data store that can be opened by the Gate GUI.  This creates a
