@@ -90,9 +90,12 @@
 (defn create-document
   "Create a document with raw text.  You can annotate the returned document
   with [[annotate-document]]."
-  [text]
-  (doto (DocumentImpl.)
-    (.setContent (DocumentContentImpl. text))))
+  ([text]
+   (doto (DocumentImpl.)
+     (.setContent (DocumentContentImpl. text))))
+  ([text name]
+   (doto (create-document text)
+     (.setName name))))
 
 (defn annotate-document
   "Annotate a document with entity **label** `type` from character
