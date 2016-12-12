@@ -21,7 +21,7 @@
                  [org.clojure/tools.logging "0.3.1"]
 
                  ;; command line
-                 [com.zensols.tools/actioncli "0.0.11"]
+                 [com.zensols.tools/actioncli "0.0.12"]
 
                  ;; gate
                  [uk.ac.gate/gate-core "8.2"]]
