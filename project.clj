@@ -13,13 +13,7 @@
   :java-source-paths ["src/java"]
   :javac-options ["-Xlint:unchecked"]
   :jar-exclusions [#".gitignore"]
-  :exclusions [org.slf4j/slf4j-log4j12
-               log4j/log4j
-               ch.qos.logback/logback-classic]
   :dependencies [[org.clojure/clojure "1.8.0"]
-
-                 ;; logging
-                 [org.clojure/tools.logging "0.3.1"]
 
                  ;; command line
                  [com.zensols.tools/actioncli "0.0.12"]
@@ -30,8 +24,8 @@
              :dev
              {:jvm-opts
               ["-Dlog4j.configurationFile=test-resources/log4j2.xml" "-Xms4g" "-Xmx12g" "-XX:+UseConcMarkSweepGC"]
-              :dependencies [[com.zensols/clj-append "1.0.4"]
-                             [org.apache.logging.log4j/log4j-core "2.3"]
-                             [org.apache.logging.log4j/log4j-api "2.3"]
-                             [org.apache.logging.log4j/log4j-slf4j-impl "2.3"]
-                             [org.apache.logging.log4j/log4j-jcl "2.3"]]}})
+              :exclusions [org.slf4j/slf4j-log4j12
+                           ch.qos.logback/logback-classic]
+              :dependencies [[org.apache.logging.log4j/log4j-core "2.7"]
+                             [org.apache.logging.log4j/log4j-slf4j-impl "2.7"]
+                             [com.zensols/clj-append "1.0.5"]]}})
