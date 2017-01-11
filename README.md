@@ -20,7 +20,16 @@ In your `project.clj` file, add:
 
 ## Documentation
 
-Additional [documentation](https://plandes.github.io/clj-gate/codox/index.html).
+API [documentation](https://plandes.github.io/clj-gate/codox/index.html).
+
+
+## Usage
+
+1. Download the Gate Developer application [here](https://gate.ac.uk).
+2. By default the library looks for it in
+   `~/Applications/Developer/GateDeveloper`.
+3. Optionally set `gate.home` as system property as
+   a [resource](https://github.com/plandes/clj-actioncli#resource-location).
 
 
 ## License
