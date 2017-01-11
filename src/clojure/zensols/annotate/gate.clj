@@ -13,7 +13,7 @@
   (res/register-resource :gate-home :system-file "gate.home"
                          :system-default
                          (-> (System/getProperty "user.home")
-                             (io/file "Applications/GateDeveloper")
+                             (io/file "Applications/Developer/GateDeveloper")
                              .getAbsolutePath))
   (let [gate-home (res/resource-path :gate-home)]
     (log/infof "initializing gate system with home: %s" gate-home)
