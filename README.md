@@ -1,6 +1,14 @@
-# Gate wraper
+# Gate Wraper
 
-Wrapper for Gate Annotation Utility.
+Wrapper for [Gate](https://gate.ac.uk) annotation natural language processing
+utility.  This is a small wrapper that makes the following easier:
+* Annotating Documents
+* Create Store Documents
+* Creating Annotation Schemas
+
+This is handy if you automate annotation of documents and then want to bring
+them into the GUI to do further annotation or just visually look at your
+annotations.
 
 
 ## Obtaining
