@@ -1,21 +1,22 @@
 # Gate wraper
 
-Wrapper for Gate Annotation Utility
+Wrapper for Gate Annotation Utility.
 
-Obtaining
----------
+
+## Obtaining
+
 In your `project.clj` file, add:
 
 [![Clojars Project](https://clojars.org/com.zensols.nlp/gate/latest-version.svg)](https://clojars.org/com.zensols.nlp/gate/)
 
 
-Documentation
--------------
+## Documentation
+
 Additional [documentation](https://plandes.github.io/clj-gate/codox/index.html).
 
 
-License
---------
+## License
+
 Copyright © 2016 Paul Landes
 
 Apache License version 2.0
