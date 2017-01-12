@@ -172,7 +172,8 @@ Keys
 
 (defn retrieve-documents
   "Retrieve Gate documents as maps that was stored by a human annotator or by
-  [[store-documents]].
+  [[store-documents]].  The data to be retrieved comes from the file system
+  pointed by the directory **store-dir**.
 
   This returns a lazy sequence of maps that have the following keys:
 
@@ -184,9 +185,9 @@ Keys
     * **:label** The label of the annotation (*type* in Gate parlance)
     * **:annotations** The character interval of the annotation text (start/end
       node in Gate parlance"
-  []
+  [store-dir]
  (let [lr-type "gate.corpora.SerialCorpusImpl"
-       data-store (doto (SerialDataStore. (file-to-url (io/file "/d/store")))
+       data-store (doto (SerialDataStore. (file-to-url store-dir))
                     .open)]
    (->> (.getLrIds data-store lr-type)
         first
