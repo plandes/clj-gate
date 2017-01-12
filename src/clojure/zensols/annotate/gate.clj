@@ -156,7 +156,7 @@ Keys
       (finally (.close store)))))
 
 (defn- doc-to-map
-  "Return a "
+  "Return a map that represesnts a Gate document (see [[retrieve-documents]])."
   [^Document doc]
   (let [anon (-> doc .getAnnotations .inDocumentOrder)]
     (->> anon
