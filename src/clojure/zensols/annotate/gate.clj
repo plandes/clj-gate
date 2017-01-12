@@ -1,11 +1,23 @@
-(ns zensols.annotate.gate
+(ns ^{:doc "Wrapper for [Gate](https://gate.ac.uk) annotation natural language
+processing utility.  This is a small wrapper that makes the following easier:
+
+* Annotating Documents
+* Create Store Documents
+* Creating Annotation Schemas"
+      :author "Paul Landes"}
+    zensols.annotate.gate
   (:import [java.util HashSet]
-           [gate Gate Factory]
+           [gate Gate Factory Utils Document]
            [gate.corpora DocumentImpl DocumentContentImpl]
-           [gate.creole AnnotationSchema FeatureSchema])
+           [gate.creole AnnotationSchema FeatureSchema]
+           [gate.persist SerialDataStore])
   (:require [clojure.java.io :as io]
             [clojure.tools.logging :as log])
   (:require [zensols.actioncli.resource :as res]))
+
+(def ^:dynamic *corpus-name*
+  "The default corpus name when creating a Gate data store."
+  "zensols-gate-corpus")
 
 (defn initialize
   "Initialize the Gate system.  This is called when this namespace is loaded."
@@ -109,26 +121,28 @@
      (.add anons start end label (feature-map features))
      doc)))
 
+(defn- file-to-url [dir]
+  (-> dir io/as-url .toString))
+
 (defn store-documents
   "Create a Gate data store that can be opened by the Gate GUI.  This creates a
   directory structure at **store-dir** and populates it **documents** that were
-  create with [[create-document]].
+  create with [[create-document]].  The name of the corpus is taken
+  from [[*corpus-name*]].
 
   **Important**: this first deletes the **store-dir** directory if it exists.
 
 Keys
 ----
-* **corpus-name**: names the corpus and defaults to `zensos-gate-corpus`
 * **resources**: resources (i.e. entities created with [[annotation-schema]])"
   [store-dir documents
-   & {:keys [corpus-name resources]
-      :or {corpus-name "zensols-gate-corpus"}}]
+   & {:keys [resources]}]
   (if (.exists store-dir)
     (delete-recursively store-dir))
   (let [store (Factory/createDataStore "gate.persist.SerialDataStore"
-                                       (-> store-dir io/as-url .toString))]
+                                       (file-to-url store-dir))]
     (try
-      (let [corpus (Factory/newCorpus corpus-name)
+      (let [corpus (Factory/newCorpus *corpus-name*)
             feats (doto (Factory/newFeatureMap)
                     (.put "transientSource" corpus))
             cd-feats (Factory/newFeatureMap)]
@@ -140,5 +154,44 @@ Keys
                (.sync store)))
         (log/infof "wrote store at: %s" store-dir))
       (finally (.close store)))))
+
+(defn- doc-to-map
+  "Return a "
+  [^Document doc]
+  (let [anon (-> doc .getAnnotations .inDocumentOrder)]
+    (->> anon
+         (map (fn [anon]
+                {:text (Utils/stringFor doc anon)
+                 :label (.getType anon)
+                 :char-range [(-> anon .getStartNode .getOffset)
+                              (-> anon .getEndNode .getOffset)]}))
+         (hash-map :document doc
+                   :name (.getName doc)
+                   :content (-> doc .getContent .getOriginalContent)
+                   :annotations))))
+
+(defn retrieve-documents
+  "Retrieve Gate documents as maps that was stored by a human annotator or by
+  [[store-documents]].
+
+  This returns a lazy sequence of maps that have the following keys:
+
+* **:document** The `gate.Document` instance (if you really need it)
+* **:name** The name of the document
+* **:content** The text string content of the document.
+* **:annotation** A map of annotation maps that have the following keys:
+    * **:text:** The text of the annotation
+    * **:label** The label of the annotation (*type* in Gate parlance)
+    * **:annotations** The character interval of the annotation text (start/end
+      node in Gate parlance"
+  []
+ (let [lr-type "gate.corpora.SerialCorpusImpl"
+       data-store (doto (SerialDataStore. (file-to-url (io/file "/d/store")))
+                    .open)]
+   (->> (.getLrIds data-store lr-type)
+        first
+        (.getLr data-store lr-type)
+        (into ())
+        (map doc-to-map))))
 
 (initialize)
