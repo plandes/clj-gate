@@ -19,7 +19,7 @@
                  [com.zensols.tools/actioncli "0.0.12"]
 
                  ;; gate
-                 [uk.ac.gate/gate-core "8.2"]]
+                 [uk.ac.gate/gate-core "8.3"]]
   :profiles {:appassem {:aot :all}
              :dev
              {:jvm-opts
