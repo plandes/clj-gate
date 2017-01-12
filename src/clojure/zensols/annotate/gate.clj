@@ -188,11 +188,13 @@ Keys
   [store-dir]
  (let [lr-type "gate.corpora.SerialCorpusImpl"
        data-store (doto (SerialDataStore. (file-to-url store-dir))
-                    .open)]
-   (->> (.getLrIds data-store lr-type)
-        first
-        (.getLr data-store lr-type)
-        (into ())
-        (map doc-to-map))))
+                    .open)
+       docs (->> (.getLrIds data-store lr-type)
+                 first
+                 (.getLr data-store lr-type)
+                 (into ())
+                 (map doc-to-map))]
+   (.close data-store)
+   docs))
 
 (initialize)
